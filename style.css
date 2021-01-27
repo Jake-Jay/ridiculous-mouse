@@ -1,0 +1,27 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway', sans-serif;
+  }
+
+  h1 {
+    font-weight: 200;
+    font-size: 3.5em;
+    min-width: 10em;
+  }
+  
+  canvas {
+    background: rgb(248, 236, 202);
+    height: 100%;
+    width: 100%;
+    display: block;
+    position: absolute;
+    z-index: 1; 
+  }
+
+  #header {
+    position: absolute; 
+    z-index: 2;
+    padding-top: 45vh;
+    padding-left: 40vw;
+  }

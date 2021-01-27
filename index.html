@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Ridiculous Mouse</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;1,500&display=swap"
+    rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <main class="wrapper">
+    <div id="header">
+      <h1 id='message'></h1>
+    </div>
+    <canvas id="canvas">
+    </canvas>
+  </main>
+  <script>
+
+    // Returns a height from 0 to 0.9*(height)
+    function getRandomHeight() {
+      return Math.floor(Math.random() * Math.floor(0.9 * height));
+    }
+
+    // Returns either 'left' or 'right'
+    function getRandomDir() {
+      var dir = Math.floor(Math.random() + 0.5);
+      if (dir === 0){
+        return 'right';
+      }
+      return 'left';
+    }
+
+    function update() {
+
+      if (state.direction === 'right') {
+        state.x += state.step_size;
+      } else {
+        state.x -= state.step_size;
+      }
+      
+      // either wall is hit
+      if (state.x > width || state.x < -img_left.width) {
+        state.step_size = 0
+        state.y = getRandomHeight();
+        state.direction = getRandomDir();
+
+        if (state.direction === 'right'){
+          state.x = -img_left.width;
+        } else {
+          state.x = width;
+        }
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height)
+      if(state.direction === 'left') {
+        ctx.drawImage(img_left, state.x, state.y);
+      } else {
+        ctx.drawImage(img_right, state.x, state.y);
+      }
+    }
+
+    function loop(timestamp) {
+
+      if(reversed_message.length > 0){
+        if(message_timer === message_timing){
+          message_builder = message_builder.concat(reversed_message.pop())
+          document.getElementById("message").textContent = message_builder;
+          message_timer = 0
+        } else {
+          message_timer ++
+        }
+      } else if (reversed_message.length == 0) {
+        // reset
+        message_builder = ''
+        document.getElementById("message").textContent = message_builder;
+        reversed_message = [...message]
+      }
+
+      if (state.step_size === 0){
+        sleep_counter +=1
+        if (sleep_counter === 50){
+          state.step_size = state.default_step_size
+          sleep_counter = 0
+        }
+      }
+
+      update();
+      draw();
+
+      window.requestAnimationFrame(loop)
+    }
+
+    // Resize the canvas
+    var canvas = document.getElementById("canvas")
+    var resize = function () {
+      width = window.innerWidth * 2
+      height = window.innerHeight * 2
+      canvas.width = width
+      canvas.height = height
+    }
+    window.onresize = resize
+    resize()
+
+    var ctx = canvas.getContext("2d")
+
+    // Variables for the floating creature
+    var img_left = new Image();
+    var img_right = new Image();
+    var width
+    var height
+    var sleep_counter = 0
+
+    img_left.src = "./creatures/fish-left.png";
+    img_right.src = "./creatures/fish-right.png";
+
+    var state = {
+      x: 0,             // starting x position
+      y: (height / 2),  // starting y position
+      direction: 'right',     // right or left
+      step_size: 30,
+      default_step_size: 30
+    }
+
+    // Variables for text
+    var message = ["H", "a", "p", "p", "y", " ", "B", "i", "r", "t", "h", "d", "a", "y", "!"].reverse()
+    var reversed_message = [...message];
+    const message_timing = 12;
+    var message_timer = 0;
+    var message_builder = "";
+
+    // Run the loop
+    loop();
+
+  </script>
+</body>
+
+</html>
