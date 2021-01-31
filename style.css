@@ -21,7 +21,22 @@ html, body {
 
   #header {
     position: absolute; 
-    z-index: 2;
+    z-index: 3;
     padding-top: 45vh;
-    padding-left: 40vw;
+    text-align: center;
+    width: 50%;
+    margin-left: 25%;
+  }
+
+  #quote {
+    position: absolute;
+    z-index: 2;
+    padding: 1em;
+    width: 20em;
+    min-height: 5em;
+    margin: 10%;
+    color: brown;
+    border-radius: 1em;
+    border: 2px solid brown;
+
   }
