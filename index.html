@@ -17,7 +17,8 @@
       <h1 id='message'></h1>
     </div>
     <div id="quote">
-      <p>Have a great day</p>
+      <p id='personal_message'>Have a great day</p>
+      <p id='author'>Jake</p>
     </div>
     <canvas id="canvas">
     </canvas>
@@ -51,11 +52,12 @@
 
     function randomiseQuote() {
       // Set the quote
-      var x = document.getElementById("quote");
       var quote = quotes[Math.floor(Math.random() * quotes.length)];
-      x.textContent = quote
-
+      document.getElementById("personal_message").textContent = quote.message
+      document.getElementById("author").textContent = quote.author
+      
       // Set the color
+      var x = document.getElementById("quote");
       var randomColor = Math.floor(Math.random()*16777215).toString(16);
       x.style.color = '#' + randomColor;
       x.style.borderColor = '#' + randomColor;
@@ -116,11 +118,6 @@
         document.getElementById("message").textContent = message_builder;
         reversed_message = [...message]
 
-        // confetti({
-        //   particleCount: 100,
-        //   spread: 70,
-        //   origin: { y: 0.6 }
-        // });
       }
 
       // keep the creature off screen
@@ -158,13 +155,13 @@
     var height
     var sleep_counter = 0
 
-    img_left.src = "./creatures/fish-left.png";
-    img_right.src = "./creatures/fish-right.png";
+    img_left.src = "./creatures/mouse-hat-left.png";
+    img_right.src = "./creatures/mouse-hat-right.png";
 
     var state = {
-      x: 0,             // starting x position
-      y: (height / 2),  // starting y position
-      direction: 'right',     // right or left
+      x: 0,                 // starting x position
+      y: (height / 2),      // starting y position
+      direction: 'right',   // right or left
       step_size: 10,
       default_step_size: 10
     }
@@ -178,9 +175,22 @@
 
     // Quotes:
     var quotes = [
-      "Have a great day. Love Jake",
-      "I miss your cap and your jokes. Happy happy. Love Sacha",
-      "Remember when..."
+      {
+        message: "Have a great day",
+        author: "Love Jake"
+      },
+      {
+        message: "Have a great year",
+        author: "Love Jake"
+      },
+      {
+        message: 'I miss your cap and your jokes. Happy happy. Love Sacha',
+        author: "Love Sacha"
+      },
+      {
+        message: "So what's news...",
+        author: "Mark"
+      }
     ]
     
     confetti({
