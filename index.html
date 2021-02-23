@@ -6,205 +6,33 @@
   <title>Ridiculous Mouse</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;1,500&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;1,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Architects+Daughter&family=Permanent+Marker&display=swap" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </head>
 
 <body>
   <main class="wrapper">
+    <button onclick="download_button_pressed()">Download Messages!</button>
     <div id="header">
       <h1 id='message'></h1>
     </div>
     <div id="quote">
-      <p id='personal_message'>Have a great day</p>
-      <p id='author'>Jake</p>
+      <p id='personal_message'>80 Years Young!</p>
+      <p id='author'>Love Everyone</p>
     </div>
-    <canvas id="canvas">
-    </canvas>
+    <canvas id="canvas" height="100%" width="100%"</canvas>
   </main>
+  
+  <!-- Confetti script -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.3.3/dist/confetti.browser.min.js"></script>
-  <script>
 
-    // Returns a height from 0 to 0.9*(height)
-    function getRandomHeight() {
-      return Math.floor(Math.random() * Math.floor(0.9 * height));
-    }
+  <!-- Animation script -->
+  <script src="load_data.js"></script>
+  <script src="animation_script.js"></script>
 
-    // Returns either 'left' or 'right'
-    function getRandomDir() {
-      var dir = Math.floor(Math.random() + 0.5);
-      if (dir === 0){
-        return 'right';
-      }
-      return 'left';
-    }
 
-    function toggleQuoteDisplay() {
-      var x = document.getElementById("quote");
-      if (x.style.display === "none") {
-        randomiseQuote()
-        x.style.display = "block";
-      } else {
-        x.style.display = "none";
-      }
-    }
-
-    function randomiseQuote() {
-      // Set the quote
-      var quote = quotes[Math.floor(Math.random() * quotes.length)];
-      document.getElementById("personal_message").textContent = quote.message
-      document.getElementById("author").textContent = quote.author
-      
-      // Set the color
-      var x = document.getElementById("quote");
-      var randomColor = Math.floor(Math.random()*16777215).toString(16);
-      x.style.color = '#' + randomColor;
-      x.style.borderColor = '#' + randomColor;
-      
-      // Randomise position
-      var marginLeft = Math.floor(Math.random()*60).toString();
-      var marginTop = Math.floor(Math.random()*60).toString();
-      x.style.marginLeft = marginLeft.concat('%')
-      x.style.marginTop = marginTop.concat('%')
-      console.log(marginLeft, marginTop)
-    }
-
-    function update() {
-
-      if (state.direction === 'right') {
-        state.x += state.step_size;
-      } else {
-        state.x -= state.step_size;
-      }
-      
-      // either wall is hit
-      if (state.x > width || state.x < -img_left.width) {
-        state.step_size = 0
-        state.y = getRandomHeight();
-        state.direction = getRandomDir();
-        toggleQuoteDisplay();
-
-        if (state.direction === 'right'){
-          state.x = -img_left.width;
-        } else {
-          state.x = width;
-        }
-      }
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, width, height)
-      if(state.direction === 'left') {
-        ctx.drawImage(img_left, state.x, state.y);
-      } else {
-        ctx.drawImage(img_right, state.x, state.y);
-      }
-    }
-
-    function loop(timestamp) {
-
-      if(reversed_message.length > 0){
-        if(message_timer === message_timing){
-          message_builder = message_builder.concat(reversed_message.pop())
-          document.getElementById("message").textContent = message_builder;
-          message_timer = 0
-        } else {
-          message_timer ++
-        }
-      } else if (reversed_message.length == 0) {
-        // reset
-        message_builder = ''
-        document.getElementById("message").textContent = message_builder;
-        reversed_message = [...message]
-
-      }
-
-      // keep the creature off screen
-      if (state.step_size === 0){
-        sleep_counter +=1
-        if (sleep_counter === 50){
-          state.step_size = state.default_step_size
-          sleep_counter = 0
-        }
-      }
-
-      update();
-      draw();
-
-      window.requestAnimationFrame(loop)
-    }
-
-    // Resize the canvas
-    var canvas = document.getElementById("canvas")
-    var resize = function () {
-      width = window.innerWidth * 2
-      height = window.innerHeight * 2
-      canvas.width = width
-      canvas.height = height
-    }
-    window.onresize = resize
-    resize()
-
-    var ctx = canvas.getContext("2d")
-
-    // Variables for the floating creature
-    var img_left = new Image();
-    var img_right = new Image();
-    var width
-    var height
-    var sleep_counter = 0
-
-    img_left.src = "./creatures/mouse-hat-left.png";
-    img_right.src = "./creatures/mouse-hat-right.png";
-
-    var state = {
-      x: 0,                 // starting x position
-      y: (height / 2),      // starting y position
-      direction: 'right',   // right or left
-      step_size: 10,
-      default_step_size: 10
-    }
-
-    // Variables for text
-    var message = ["H", "A", "P", "P", "Y", " ", "B", "I", "R", "T", "H", "D", "A", "Y", "!",  "!"].reverse()
-    var reversed_message = [...message];
-    const message_timing = 12;
-    var message_timer = 0;
-    var message_builder = "";
-
-    // Quotes:
-    var quotes = [
-      {
-        message: "Have a great day",
-        author: "Love Jake"
-      },
-      {
-        message: "Have a great year",
-        author: "Love Jake"
-      },
-      {
-        message: 'I miss your cap and your jokes. Happy happy. Love Sacha',
-        author: "Love Sacha"
-      },
-      {
-        message: "So what's news...",
-        author: "Mark"
-      }
-    ]
-    
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 }
-    });
-
-    // Run the loop
-    setTimeout(()=>{
-      loop();
-    }, 5000)
-
-  </script>
 </body>
 
 </html>

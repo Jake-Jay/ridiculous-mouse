@@ -2,6 +2,7 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: 'Raleway', sans-serif;
+    background: rgb(248, 236, 202);
   }
 
   h1 {
@@ -11,12 +12,19 @@ html, body {
   }
   
   canvas {
-    background: rgb(248, 236, 202);
-    height: 100%;
-    width: 100%;
     display: block;
     position: absolute;
     z-index: 1; 
+  }
+
+  button {
+    z-index: 1;
+    margin: 1%;
+    padding: 1em;
+    border-radius: 1em;
+    font-family: 'Permanent Marker', cursive;
+    background: rgba(3, 256, 256, .3) ;
+    box-shadow: 3px 3px;
   }
 
   #header {
@@ -26,17 +34,21 @@ html, body {
     text-align: center;
     width: 50%;
     margin-left: 25%;
+    font-family: 'Permanent Marker', cursive;
   }
 
   #quote {
     position: absolute;
     z-index: 2;
-    padding: 1em;
-    width: 20em;
-    min-height: 5em;
-    margin: 10%;
+    padding: 0.5em;
+    width: 250px;
+    min-height: 100px;
+    margin: 1%;
     color: brown;
     border-radius: 1em;
     border: 2px solid brown;
-
+    font-family: 'Amatic SC', cursive;
+    font-size: 25px;
+    z-index: 3; 
+    background: rgba(256, 256, 256, .3) ;
   }
