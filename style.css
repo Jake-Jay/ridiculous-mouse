@@ -23,7 +23,7 @@ html, body {
     padding: 1em;
     border-radius: 1em;
     font-family: 'Permanent Marker', cursive;
-    background: rgba(3, 256, 256, .3) ;
+    background: rgb(3, 256, 256) ;
     box-shadow: 3px 3px;
   }
 
@@ -50,5 +50,5 @@ html, body {
     font-family: 'Amatic SC', cursive;
     font-size: 25px;
     z-index: 3; 
-    background: rgba(256, 256, 256, .3) ;
+    background: rgba(256, 256, 256, .6) ;
   }
