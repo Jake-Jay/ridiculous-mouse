@@ -1,6 +1,10 @@
-// Returns a height from 0 to 0.9*(height)
-function getRandomHeight() {
-    return Math.floor(Math.random() * Math.floor(0.9 * height));
+// -----------------------------------------------------------------------------
+// Helper Functions
+// -----------------------------------------------------------------------------
+
+// Returns a height from 0 to max*(height); max El(0, 0.9]
+function getRandomHeight(max=0.75) {
+    return Math.floor(Math.random() * Math.floor(max * height));
 }
 
 // Returns either 'left' or 'right'
@@ -12,36 +16,27 @@ function getRandomDir() {
     return 'left';
 }
 
-function toggleQuoteDisplay() {
-    var x = document.getElementById("quote");
-    if (x.style.display === "none") {
-        randomiseQuote()
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
-}
-
 function randomiseQuote() {
     // Set the quote
     var q = quotes[Math.floor(Math.random() * quotes.length)];
-    document.getElementById("personal_message").textContent = q.message
-    document.getElementById("author").textContent = q.author
+    document.getElementById("personal_message").textContent = q.message;
+    document.getElementById("author").textContent = q.author;
 
-    // Set the color
-    var randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    quote.style.color = '#' + randomColor;
-    quote.style.borderColor = '#' + randomColor;
+    // Choose the color randomly
+    var randomColorIndex = Math.floor(Math.random() * quote_colors.length);
+    quote.style.color = quote_colors[randomColorIndex];
+    quote.style.borderColor = quote_colors[randomColorIndex];
 
     // Randomise position
-    var canvas = document.getElementById("canvas");
-    var font_size = quote.style.fontSize;
-
     var left = Math.max(0, Math.floor(Math.random() * (window.screen.width - quote.offsetWidth))).toString();
     var top = Math.max(0, Math.floor(Math.random() * (window.screen.height - quote.offsetHeight))).toString();
-    quote.style.left = left.concat('px')
-    quote.style.top = top.concat('px')
+    quote.style.left = left.concat('px');
+    quote.style.top = top.concat('px');
 }
+
+// -----------------------------------------------------------------------------
+// Animation Loop Functions
+// -----------------------------------------------------------------------------
 
 function update() {
 
@@ -56,7 +51,8 @@ function update() {
         state.step_size = 0
         state.y = getRandomHeight();
         state.direction = getRandomDir();
-        // toggleQuoteDisplay();
+
+        // Display random quote
         randomiseQuote();
 
         if (state.direction === 'right') {
@@ -69,7 +65,6 @@ function update() {
 
 function draw() {
     ctx.clearRect(0, 0, width, height);
-    var size_scaling = Math.floor(Math.random() * 4);
     var img_width = img_left.width / state.img_size_scaler;
     var img_height = img_left.height / state.img_size_scaler;
     if (state.direction === 'left') {
@@ -113,13 +108,18 @@ function loop(timestamp) {
     window.requestAnimationFrame(loop)
 }
 
+
+// -----------------------------------------------------------------------------
+// Global scope and setup
+// -----------------------------------------------------------------------------
+
 // Get the stuff from the DOM
 var canvas = document.getElementById("canvas")
 var quote = document.getElementById("quote");
 
 var resize = function () {
-    width = window.innerWidth //* 2
-    height = window.innerHeight //* 2
+    width = window.innerWidth 
+    height = window.innerHeight
     canvas.width = width
     canvas.height = height
 }
@@ -142,16 +142,22 @@ var state = {
     x: 0,                 // starting x position
     y: (height / 2),      // starting y position
     direction: 'right',   // right or left
-    step_size: 10,
-    default_step_size: 10
+    step_size: 6,
+    default_step_size: 6
 }
 
 // Variables for text
-var message = ["H", "A", "P", "P", "Y", " ", "B", "I", "R", "T", "H", "D", "A", "Y", "!", "!", "!"].reverse()
+var message = ["H", "A", "P", "P", "Y", " ", 
+    "B", "I", "R", "T", "H", "D", "A", "Y", "!", "!", "!"].reverse()
 var reversed_message = [...message];
 const message_timing = 12;
 var message_timer = 0;
 var message_builder = "";
+
+
+// -----------------------------------------------------------------------------
+// Start the actual animation
+// -----------------------------------------------------------------------------
 
 confetti({
     particleCount: 100,
